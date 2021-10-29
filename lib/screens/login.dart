@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebese_auth/methods/authentication.dart';
 // import 'package:firebese_auth/models/unsplash.dart';
 import 'package:firebese_auth/screens/homeScreen.dart';
 import 'package:firebese_auth/screens/signup.dart';
@@ -37,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController _passwordController = TextEditingController();
 
-  bool checkBoxValue = true;
+  bool isLogin = true;
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +140,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             TextFormField(
                               key: ValueKey("username"),
+                              validator: (value) {
+                                if (value.toString().length < 3) {
+                                  return 'Username is so small';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              onSaved: (value) {
+                                setState(() {
+                                  _usernameController.text = value!;
+                                });
+                              },
                               decoration: InputDecoration(
                                 hintText: "Username",
                                 hintStyle: TextStyle(
@@ -160,6 +173,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             TextFormField(
                               key: ValueKey("password"),
+                              validator: (value) {
+                                if (value.toString().length < 6) {
+                                  return 'Password is so small';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              onSaved: (value) {
+                                setState(() {
+                                  _passwordController.text = value!;
+                                });
+                              },
                               decoration: InputDecoration(
                                 hintText: "Password",
                                 hintStyle: TextStyle(
@@ -194,17 +219,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             InkWell(
                               onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) {
-                                //       return HomeScreen(
-                                //           userEmail: userEmail,
-                                //           userNAme: userNAme,
-                                //           photoUrl: photoUrl);
-                                //     },
-                                //   ),
-                                // );
+                                signin(_usernameController.text,
+                                    _passwordController.text);
+                                Future.delayed(Duration(seconds: 5), () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return HomeScreen();
+                                    }),
+                                  );
+                                });
                               },
                               child: Container(
                                 alignment: Alignment.center,

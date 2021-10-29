@@ -1,5 +1,7 @@
 // @dart=2.9
 
+import 'dart:async';
+
 import 'package:firebese_auth/unsplashApi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -22,18 +24,21 @@ class _WallpaperState extends State<Wallpaper> {
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
 
-    // var exeTime;
+    DateTime exeTime;
     setWallpaper(url) async {
       int location = WallpaperManager.HOME_SCREEN; //can be Home/Lock Screen
       var file = await DefaultCacheManager().getSingleFile(url);
       try {
+        Stopwatch stopwatch = new Stopwatch()..start();
         bool result =
             await WallpaperManager.setWallpaperFromFile(file.path, location);
+        print('doSomething() executed in ${stopwatch.elapsed}');
+
+// Timer(exeTime.difference(DateTime.now()),);
+        print(result);
       } catch (e) {
         print(e);
       }
-
-      if (!mounted) return "error";
     }
 
     return Scaffold(

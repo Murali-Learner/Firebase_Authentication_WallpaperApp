@@ -1,9 +1,17 @@
+import 'dart:ui';
+
+import 'package:firebese_auth/methods/authentication.dart';
 import 'package:firebese_auth/screens/login.dart';
 import 'package:flutter/material.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
+  @override
+  _SignupScreenState createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     double _height = MediaQuery.of(context).size.height;
@@ -116,6 +124,18 @@ class SignupScreen extends StatelessWidget {
                                     height: _height * 0.06,
                                   ),
                                   TextFormField(
+                                    validator: (value) {
+                                      if (value.toString().length < 3) {
+                                        return 'Username is so small';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    onSaved: (value) {
+                                      setState(() {
+                                        _usernameController.text = value!;
+                                      });
+                                    },
                                     key: ValueKey("username"),
                                     decoration: InputDecoration(
                                       hintText: "Username",
@@ -140,6 +160,18 @@ class SignupScreen extends StatelessWidget {
                                   ),
                                   TextFormField(
                                     key: ValueKey("emial"),
+                                    validator: (value) {
+                                      if (!(value.toString().contains('@'))) {
+                                        return 'Invalid Email';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    onSaved: (value) {
+                                      setState(() {
+                                        _emailController.text = value!;
+                                      });
+                                    },
                                     decoration: InputDecoration(
                                       hintText: "Email",
                                       hintStyle: TextStyle(
@@ -163,6 +195,18 @@ class SignupScreen extends StatelessWidget {
                                   ),
                                   TextFormField(
                                     key: ValueKey("password"),
+                                    validator: (value) {
+                                      if (value.toString().length < 6) {
+                                        return 'Password is so small';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    onSaved: (value) {
+                                      setState(() {
+                                        _passwordController.text = value!;
+                                      });
+                                    },
                                     decoration: InputDecoration(
                                       hintText: "Password",
                                       hintStyle: TextStyle(
@@ -186,12 +230,16 @@ class SignupScreen extends StatelessWidget {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) {
-                                          return LoginScreen();
-                                        }),
-                                      );
+                                      signup(_emailController.text,
+                                          _passwordController.text);
+                                      Future.delayed(Duration(seconds: 5), () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) {
+                                            return LoginScreen();
+                                          }),
+                                        );
+                                      });
                                     },
                                     child: Container(
                                       alignment: Alignment.center,
@@ -208,6 +256,47 @@ class SignupScreen extends StatelessWidget {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: _height * 0.01,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return LoginScreen();
+                                        }),
+                                      );
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Already Signedup",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: _width * 0.02,
+                                        ),
+                                        Text(
+                                          "Login",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: Colors.amber,
+                                            shadows: [],
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
                                   SizedBox(
